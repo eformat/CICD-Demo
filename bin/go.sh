@@ -12,10 +12,11 @@ fi
 
 bin/cache.sh
 
-oc login $OSEARGS -u $DEMOUSER -p $DEMOPW 
+sudo htpasswd -b /etc/openshift/openshift-passwd $DEMOUSER $DEMOPW
+oc login -u $DEMOUSER -p $DEMOPW
 
 for img in $STI_IMAGESTREAMS; do
-  sudo oc create -f - <<EOF
+  sudo oc create -n openshift -f - <<EOF
 kind: ImageStream
 apiVersion: v1
 metadata:
@@ -27,8 +28,12 @@ spec:
 EOF
 done
 
+for key in administrator $DEMOUSER; do
+  [ -e ~/.ssh/id_rsa_$key ] || ssh-keygen -f ~/.ssh/id_rsa_$key -N ''
+done
+
 for proj in $INTEGRATION $DEMOUSER; do
-  oc new-project $proj 
+  sudo oadm new-project $proj --admin=$DEMOUSER
   oc project $proj
 
   for repo in $INTEGRATION_REPOS; do
@@ -38,7 +43,7 @@ for proj in $INTEGRATION $DEMOUSER; do
 done
 
 for proj in $PROD; do
-  oc new-project $proj 
+  sudo oadm new-project $proj --admin=$DEMOUSER
   oc project $proj
 
   for repo in $PROD_REPOS; do
@@ -47,7 +52,7 @@ for proj in $PROD; do
 done
 
 for proj in $INFRA; do
-  oc new-project $proj
+  sudo oadm new-project $proj --admin=$DEMOUSER
   oc project $proj
 
   for repo in $INFRA_REPOS; do
