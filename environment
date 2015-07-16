@@ -17,6 +17,7 @@ MAVEN_MIRROR=
 
 # all application microservices repositories
 MONSTER_REPOS='broker restapis emailroute db-iaas db-paas webserver'
+
 # all additional CICD-Demo development repositories
 DEV_REPOS='docker-amq docker-gogs docker-jenkins docker-sti-eap gogs-src'
 
