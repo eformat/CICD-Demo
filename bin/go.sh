@@ -13,7 +13,7 @@ fi
 bin/cache.sh
 
 sudo htpasswd -b /etc/openshift/openshift-passwd $DEMOUSER $DEMOPW
-oc login -u $DEMOUSER -p $DEMOPW
+oc login $OSEARGS -u $DEMOUSER -p $DEMOPW
 
 for img in $STI_IMAGESTREAMS; do
   sudo oc create -n openshift -f - <<EOF
