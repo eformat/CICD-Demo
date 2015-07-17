@@ -5,7 +5,7 @@ GITROOT_PUSH='git@github.com:CICD-Demo'
 
 # login to OSE3 and Gogs
 export DEMOUSER='devops'
-export DEMOPW='redhat'
+export DEMOPW=
 export DOMAIN='cloudapps.ose.eformat.co.nz'
 export OSEARGS='--server=https://ose3-master.hosts.ose.eformat.co.nz:8443 --insecure-skip-tls-verify=true'
 
