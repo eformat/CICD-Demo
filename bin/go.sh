@@ -80,5 +80,5 @@ EOF
 done
 
 # serviceAccount required for containers running as root
-echo '{"kind": "ServiceAccount", "apiVersion": "v1", "metadata": {"name": "root"}}' | sudo oc create -n infra -f -
-(sudo oc get -o yaml scc privileged; echo - system:serviceaccount:infra:root) | sudo oc update scc privileged -f -
+echo '{"kind": "ServiceAccount", "apiVersion": "v1", "metadata": {"name": "root"}}' | oc create -n openshift-infra -f -
+(oc get -o yaml scc privileged; echo - system:serviceaccount:openshift-infra:root) | oc update scc privileged -f -
