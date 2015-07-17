@@ -30,6 +30,10 @@ spec:
 EOF
 done
 
+for key in administrator $DEMOUSER; do
+  [ -e ~/.ssh/id_rsa_$key ] || ssh-keygen -f ~/.ssh/id_rsa_$key -N ''
+done
+
 for proj in $INTEGRATION $DEMOUSER; do
   oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
  
@@ -63,10 +67,15 @@ EOF
 done
 
 for proj in $INFRA; do
-  oadm new-project $proj --admin=$DEMOUSER
+  oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
 
   for repo in $INFRA_REPOS; do
-    infra/$repo/deploy.sh
+	su $DEMOUSER <<EOF		
+		oc login -u $DEMOUSER -p $DEMOPW $OSEARGS
+		oc project $proj  
+    	$DIR/infra/$repo/deploy.sh
+EOF
+
   done
 done
 
