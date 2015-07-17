@@ -69,16 +69,16 @@ done
 for proj in $INFRA; do
   oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
 
+  # serviceAccount required for containers running as root
+  echo '{"kind": "ServiceAccount", "apiVersion": "v1", "metadata": {"name": "root"}}' | oc create -n openshift-infra -f -
+  (oc get -o yaml scc privileged; echo - system:serviceaccount:openshift-infra:root) | oc update scc privileged -f -
+
   for repo in $INFRA_REPOS; do
 	su $DEMOUSER <<EOF		
 		oc login -u $DEMOUSER -p $DEMOPW $OSEARGS
 		oc project $proj  
-    	$DIR/infra/$repo/deploy.sh
+		$DIR/infra/$repo/deploy.sh
 EOF
 
   done
 done
-
-# serviceAccount required for containers running as root
-echo '{"kind": "ServiceAccount", "apiVersion": "v1", "metadata": {"name": "root"}}' | oc create -n openshift-infra -f -
-(oc get -o yaml scc privileged; echo - system:serviceaccount:openshift-infra:root) | oc update scc privileged -f -
