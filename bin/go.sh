@@ -31,7 +31,7 @@ EOF
 done
 
 for proj in $INTEGRATION $DEMOUSER; do
-  oadm new-project $proj --display-name="$proj" --description="CICD $proj" --admin=$DEMOUSER
+  oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
  
   for repo in $INTEGRATION_REPOS; do  	
   	su $DEMOUSER <<EOF
@@ -50,7 +50,7 @@ EOF
 done
 
 for proj in $PROD; do
-  oadm new-project $proj --display-name="$proj" --description="CICD $proj" --admin=$DEMOUSER
+  oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
 
   for repo in $PROD_REPOS; do
 		oc login -u $DEMOUSER -p $DEMOPW $OSEARGS
