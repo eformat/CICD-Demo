@@ -11,7 +11,7 @@ if ! which java &>/dev/null; then
   exit 1
 fi
 
-[ "$USER" -ne "root" ]; exit "please run as root on ose-master"
+if [ "$USER" != "root" ]; then exit "please run as root on ose-master"; fi
 
 $DIR/bin/cache.sh
 
