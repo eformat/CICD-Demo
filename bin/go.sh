@@ -53,9 +53,12 @@ for proj in $PROD; do
   oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
 
   for repo in $PROD_REPOS; do
+	su $DEMOUSER <<EOF		
 		oc login -u $DEMOUSER -p $DEMOPW $OSEARGS
 		oc project $proj
 		$DIR/monster/$repo/deploy.sh
+EOF
+		
   done
 done
 
