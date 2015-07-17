@@ -37,6 +37,8 @@ done
 for proj in $INTEGRATION $DEMOUSER; do
   oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
  
+  sleep 1;
+   
   for repo in $INTEGRATION_REPOS; do  	
   	su $DEMOUSER <<EOF
 		oc login -u $DEMOUSER -p $DEMOPW $OSEARGS
@@ -56,6 +58,8 @@ done
 for proj in $PROD; do
   oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
 
+  sleep 1;  
+
   for repo in $PROD_REPOS; do
 	su $DEMOUSER <<EOF		
 		oc login -u $DEMOUSER -p $DEMOPW $OSEARGS
@@ -68,10 +72,12 @@ done
 
 for proj in $INFRA; do
   oadm new-project $proj --display-name="$proj" --description="$proj" --admin=$DEMOUSER
-
+  
+  sleep 1;
+  
   # serviceAccount required for containers running as root
-  echo '{"kind": "ServiceAccount", "apiVersion": "v1", "metadata": {"name": "root"}}' | oc create -n openshift-infra -f -
-  (oc get -o yaml scc privileged; echo - system:serviceaccount:openshift-infra:root) | oc update scc privileged -f -
+  echo '{"kind": "ServiceAccount", "apiVersion": "v1", "metadata": {"name": "root"}}' | oc create -n infra -f -
+  (oc get -o yaml scc privileged; echo - system:serviceaccount:infra:root) | oc update scc privileged -f -
 
   for repo in $INFRA_REPOS; do
 	su $DEMOUSER <<EOF		
